@@ -19,6 +19,11 @@ namespace SPA_app_comments.Infrastructure
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<Comment>()
+                .Navigation(c => c.User)
+                .AutoInclude();
+
         }
 
     }
