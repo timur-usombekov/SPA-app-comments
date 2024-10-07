@@ -1,7 +1,7 @@
-﻿using SPA_app_comments.Core.Domain.Entities;
+﻿using Microsoft.AspNetCore.Mvc;
+using SPA_app_comments.Core.Domain.Entities;
 using SPA_app_comments.Core.Domain.RepositoryContracts;
 using SPA_app_comments.Core.Domain.Requests.Comments;
-using SPA_app_comments.Core.Dto;
 using SPA_app_comments.Core.Helpers.Extensions;
 using SPA_app_comments.Infrastructure;
 
@@ -9,11 +9,22 @@ namespace SPA_app_comments.MinimalAPI
 {
     public class MinimalAPI
     {
-        public static IResult GetComments(IUnitOfWork<ApplicationDbContext> db)
+        public static IResult GetMainComments(IUnitOfWork<ApplicationDbContext> db)
         {
             var repo = db.GetRepository<Comment>();
             var comments = repo.GetAll();
             var commentResponse = comments
+                .Where(c => c.ParentCommentId is null)
+                .Select(c => c.ToCommentResponse()).ToList();
+
+            return TypedResults.Ok(commentResponse);
+        }
+        public static IResult GetRepliesForComment([FromRoute] Guid commentId, IUnitOfWork<ApplicationDbContext> db)
+        {
+            var repo = db.GetRepository<Comment>();
+            var comments = repo.GetAll();
+            var commentResponse = comments
+                .Where(c => c.ParentCommentId == commentId)
                 .Select(c => c.ToCommentResponse()).ToList();
 
             return TypedResults.Ok(commentResponse);
@@ -30,7 +41,7 @@ namespace SPA_app_comments.MinimalAPI
                     Id = Guid.NewGuid(),
                     UserId = existUser.Id,
                     Text = request.Text,
-                    ParentCommentId = request.ParentId,
+                    ParentCommentId = request.ParentCommentId,
                 });
 
                 await db.SaveChangesAsync();
@@ -52,7 +63,7 @@ namespace SPA_app_comments.MinimalAPI
                     Id = Guid.NewGuid(),
                     UserId = user.Id,
                     Text = request.Text,
-                    ParentCommentId = request.ParentId
+                    ParentCommentId = request.ParentCommentId
                 });
 
                 await db.SaveChangesAsync();

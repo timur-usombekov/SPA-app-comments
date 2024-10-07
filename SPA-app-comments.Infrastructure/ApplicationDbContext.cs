@@ -23,7 +23,6 @@ namespace SPA_app_comments.Infrastructure
             modelBuilder.Entity<Comment>()
                 .Navigation(c => c.User)
                 .AutoInclude();
-
         }
 
     }

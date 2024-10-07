@@ -6,6 +6,18 @@ using SPA_app_comments.MinimalAPI;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// CORS
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll",
+        policy =>
+        {
+            policy.AllowAnyOrigin()
+                  .AllowAnyMethod()
+                  .AllowAnyHeader();
+        });
+});
+
 // Add services to the container.
 
 builder.Services.AddControllers();
@@ -26,7 +38,10 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-app.MapGet("/comment", MinimalAPI.GetComments);
+app.MapGet("/comment", MinimalAPI.GetMainComments);
+app.MapGet("/comment/{commentId}", MinimalAPI.GetRepliesForComment);
 app.MapPost("/comment", MinimalAPI.CreateComment);
+
+app.UseCors("AllowAll");
 
 app.Run();
