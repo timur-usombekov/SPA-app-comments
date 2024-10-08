@@ -94,7 +94,7 @@ function CommentForm() {
     };
 
     return (
-        <form onSubmit={handleSubmit} style={styles.form}>
+        <form onSubmit={handleSubmit} className="commentForm-form">
             <FormGroup
                 label="User Name"
                 labelFor="username"
