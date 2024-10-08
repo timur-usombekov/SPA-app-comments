@@ -1,14 +1,17 @@
+import React from 'react'
+import '@blueprintjs/core/lib/css/blueprint.css';
+import CommentForm from './CommentForm';
+import CommentList from './CommentList';
 import './App.css';
-import CommentsList from './CommentsList';
+
 function App() {
-    return (
-        <div className="App">
-            <header className="App-header">
-                <h1>Comments App</h1>
-                <CommentsList />
-            </header>
-        </div>
-    );
+	return (
+		<div className="centered-container">
+			<CommentForm />
+			<h3>Comments:</h3>
+			<CommentList/>
+		</div >
+	);
 }
 
-export default App;
+export default App; 

@@ -40,7 +40,7 @@ app.MapControllers();
 
 app.MapGet("/comment", MinimalAPI.GetMainComments);
 app.MapGet("/comment/{commentId}", MinimalAPI.GetRepliesForComment);
-app.MapPost("/comment", MinimalAPI.CreateComment);
+app.MapPost("/comment", MinimalAPI.CreateComment).DisableAntiforgery();
 
 app.UseCors("AllowAll");
 

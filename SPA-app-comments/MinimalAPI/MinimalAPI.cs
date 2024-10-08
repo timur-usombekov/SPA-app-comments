@@ -29,7 +29,8 @@ namespace SPA_app_comments.MinimalAPI
 
             return TypedResults.Ok(commentResponse);
         }
-        public async static Task<IResult> CreateComment(CreateCommentRequest request, IUnitOfWork<ApplicationDbContext> db)
+
+        public async static Task<IResult> CreateComment([FromForm] CreateCommentRequest request, IUnitOfWork<ApplicationDbContext> db)
         {
             var commentRepo = db.GetRepository<Comment>();
             var userRepo = db.GetRepository<User>();
@@ -41,7 +42,7 @@ namespace SPA_app_comments.MinimalAPI
                     Id = Guid.NewGuid(),
                     UserId = existUser.Id,
                     Text = request.Text,
-                    ParentCommentId = request.ParentCommentId,
+                    ParentCommentId = request.ParentCommentId == Guid.Empty ? null : request.ParentCommentId,
                 });
 
                 await db.SaveChangesAsync();
@@ -63,7 +64,7 @@ namespace SPA_app_comments.MinimalAPI
                     Id = Guid.NewGuid(),
                     UserId = user.Id,
                     Text = request.Text,
-                    ParentCommentId = request.ParentCommentId
+                    ParentCommentId = request.ParentCommentId == Guid.Empty ? null : request.ParentCommentId
                 });
 
                 await db.SaveChangesAsync();
