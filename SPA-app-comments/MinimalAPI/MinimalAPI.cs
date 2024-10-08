@@ -2,6 +2,7 @@
 using SPA_app_comments.Core.Domain.Entities;
 using SPA_app_comments.Core.Domain.RepositoryContracts;
 using SPA_app_comments.Core.Domain.Requests.Comments;
+using SPA_app_comments.Core.Helpers.Exeptions;
 using SPA_app_comments.Core.Helpers.Extensions;
 using SPA_app_comments.Infrastructure;
 
@@ -37,39 +38,86 @@ namespace SPA_app_comments.MinimalAPI
             var existUser = userRepo.GetAll((user) => user.Name == request.UserName && user.Email == request.Email).FirstOrDefault();
             if (existUser is not null)
             {
-                var comment = commentRepo.Insert(new Comment() 
+                try
                 {
-                    Id = Guid.NewGuid(),
-                    UserId = existUser.Id,
-                    Text = request.Text,
-                    ParentCommentId = request.ParentCommentId == Guid.Empty ? null : request.ParentCommentId,
-                });
-
-                await db.SaveChangesAsync();
-                return TypedResults.Created("/comment", comment.ToCommentResponse());
+                    return await SaveCommentWithoutUser(commentRepo, db, existUser, request);
+                }
+                catch (FileSizeException e)
+                {
+                    return TypedResults.BadRequest(e.Message);
+                }
             }
             else
             {
-                var user = userRepo.Insert(new User()
+                try
                 {
-                    Id = Guid.NewGuid(),
-                    Email = request.Email,
-                    Name = request.UserName,
-                });
-
-                await db.SaveChangesAsync();
-
-                var comment = commentRepo.Insert(new Comment()
+                    return await SaveCommentWithUser(commentRepo, userRepo, db, request);
+                }
+                catch (FileSizeException e)
                 {
-                    Id = Guid.NewGuid(),
-                    UserId = user.Id,
-                    Text = request.Text,
-                    ParentCommentId = request.ParentCommentId == Guid.Empty ? null : request.ParentCommentId
-                });
+                    return TypedResults.BadRequest(e.Message);
+                }
 
-                await db.SaveChangesAsync();
-                return TypedResults.Created("/comment", comment.ToCommentResponse());
+            }
+        }
+        private static async Task<IResult> SaveCommentWithoutUser(IRepository<Comment> commentRepository, 
+            IUnitOfWork<ApplicationDbContext> db,
+            User user, CreateCommentRequest request)
+        {
+            var comment = commentRepository.Insert(new Comment()
+            {
+                Id = Guid.NewGuid(),
+                UserId = user.Id,
+                Text = request.Text,
+                File = await CheckFile(request.File),
+                ParentCommentId = request.ParentCommentId == Guid.Empty ? null : request.ParentCommentId,
+            });
 
+            await db.SaveChangesAsync();
+            return TypedResults.Created("/comment", comment.ToCommentResponse());
+        }
+
+        private static async Task<IResult> SaveCommentWithUser(
+            IRepository<Comment> commentRepository,
+            IRepository<User> userRepository,
+            IUnitOfWork<ApplicationDbContext> db,
+            CreateCommentRequest request)
+        {
+            var user = userRepository.Insert(new User()
+            {
+                Id = Guid.NewGuid(),
+                Email = request.Email,
+                Name = request.UserName,
+            });
+
+            await db.SaveChangesAsync();
+
+            var comment = commentRepository.Insert(new Comment()
+            {
+                Id = Guid.NewGuid(),
+                UserId = user.Id,
+                Text = request.Text,
+                File = await CheckFile(request.File),
+                ParentCommentId = request.ParentCommentId == Guid.Empty ? null : request.ParentCommentId
+            });
+
+            await db.SaveChangesAsync();
+            return TypedResults.Created("/comment", comment.ToCommentResponse());
+        }
+
+        private static async Task<byte[]?> CheckFile(IFormFile? file)
+        {
+            if (file is null)
+                return null;
+
+            using (var memoryStream = new MemoryStream())
+            {
+                await file.CopyToAsync(memoryStream);
+                if(file.Length > 1024 * 100)
+                    throw new ArgumentException("Text file size exceeds the limit of 100 KB.");
+                var fileData = memoryStream.ToArray(); // array
+
+                return fileData;
             }
         }
     }

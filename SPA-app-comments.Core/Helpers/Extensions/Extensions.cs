@@ -12,7 +12,6 @@ namespace SPA_app_comments.Core.Helpers.Extensions
                 Id = comment.Id,
                 CreatedAt = comment.CreatedAt,
                 File = comment.File,
-                Photo = comment.Photo,
                 ParentCommentId = comment.ParentCommentId,
                 Text = comment.Text,
                 User = comment.User.ToUserResponse(),

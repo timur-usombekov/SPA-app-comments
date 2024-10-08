@@ -11,7 +11,6 @@ namespace SPA_app_comments.Core.Domain.Entities
         [Required]
         public string Text { get; set; } = null!;
         public byte[]? File { get; set; }
-        public byte[]? Photo { get; set; }
         public DateTime CreatedAt { get; } = DateTime.Now;
 
 
