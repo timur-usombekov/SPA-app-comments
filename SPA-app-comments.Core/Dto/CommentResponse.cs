@@ -7,10 +7,7 @@
         public UserResponse User { get; set; }
         public string Text { get; set; } = null!;
         public byte[]? File { get; set; }
-        public byte[]? Photo { get; set; }
         public DateTime CreatedAt { get; set; }
 
-
-        //public List<CommentResponse> Replies { get; set; }
     }
 }

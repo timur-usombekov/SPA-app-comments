@@ -1,7 +1,14 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import './App.css';
-import { FormGroup, InputGroup, Button, TextArea, Callout } from '@blueprintjs/core';
+import {
+    FormGroup,
+    InputGroup,
+    Button,
+    TextArea,
+    Callout,
+    FileInput,
+} from '@blueprintjs/core';
 
 function CommentForm() {
     const [formData, setFormData] = useState({
@@ -29,7 +36,7 @@ function CommentForm() {
         return new Promise((resolve) => {
             img.onload = () => {
                 if (img.width > 320 || img.height > 240) {
-                    resolve(false); 
+                    resolve(false);
                 }
                 resolve(true);
             };
@@ -60,14 +67,14 @@ function CommentForm() {
         if (formData.file) {
             if (formData.file.size > 100 * 1024) {
                 newErrors.file = 'File size must not exceed 100 KB.';
-            } else if (!/\.(jpg|jpeg|png|gif)$/i.test(formData.file.name)) {
-                newErrors.file = 'File must be in JPG, GIF, or PNG format.';
+            } else if (!/\.(jpg|txt|png|gif)$/i.test(formData.file.name)) {
+                newErrors.file = 'File must be in JPG, GIF, TXT, or PNG format.';
             } else {
-                const isValidImage = await validateImage(formData.file);
+                /*const isValidImage = await validateImage(formData.file);
                 if (!isValidImage) {
                     newErrors.file = 'Image must not exceed 320x240 pixels. It will be resized.';
                     // TODO: make image smaller
-                }
+                }*/
             }
         }
 
@@ -87,6 +94,15 @@ function CommentForm() {
             try {
                 const response = await axios.post('https://localhost:7137/comment', formDataToSubmit);
                 console.log('Data submitted successfully:', response.data);
+                setFormData({
+                    username: '',
+                    email: '',
+                    url: '',
+                    text: '',
+                    file: null,
+                    ParentCommentId: '00000000-0000-0000-0000-000000000000'
+                });
+                setErrors({});
             } catch (error) {
                 console.error('Error submitting data:', error);
             }
@@ -135,7 +151,7 @@ function CommentForm() {
             >
                 <InputGroup
                     id="homepage"
-                    name="homepage"
+                    name="url"
                     placeholder="Enter your home page URL"
                     value={formData.url}
                     onChange={handleChange}
@@ -149,12 +165,11 @@ function CommentForm() {
                 helperText={errors.file}
                 intent={errors.file ? 'danger' : 'none'}
             >
-                <input
+                <FileInput
                     id="file"
                     name="file"
-                    type="file"
-                    accept=".jpg, .jpeg, .gif, .png, .txt"
                     onChange={handleChange}
+                    accept=".jpg, .gif, .png, .txt"
                 />
             </FormGroup>
 
@@ -181,11 +196,9 @@ function CommentForm() {
                 </Callout>
             )}
 
-            <Button type="submit" intent="primary" text="Submit" />
+            <Button type="submit" intent="primary" text="Submit" icon="send-message" />
         </form>
     );
 }
-
-
 
 export default CommentForm;

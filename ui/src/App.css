@@ -31,6 +31,9 @@
     color: #333;
     margin-bottom: 16px;
 }
+.commentCard-file {
+    margin-bottom: 16px;
+}
 
 .commentCard-actions {
     display: flex;
