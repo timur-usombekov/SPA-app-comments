@@ -22,7 +22,7 @@ const CommentList = () => {
                     for (let i = 0; i < byteCharacters.length; i++) {
                         byteNumbers[i] = byteCharacters.charCodeAt(i);
                     }
-                    const blob = new Blob([byteNumbers], { type: 'application/octet-stream' });
+                    const blob = new Blob([byteNumbers], { type: 'image/png' });
                     const file = new File([blob], 'attachment');
                     return { ...comment, file };
                 }

@@ -2,9 +2,11 @@
 using SPA_app_comments.Core.Domain.Entities;
 using SPA_app_comments.Core.Domain.RepositoryContracts;
 using SPA_app_comments.Core.Domain.Requests.Comments;
+using SPA_app_comments.Core.Dto;
 using SPA_app_comments.Core.Helpers.Exeptions;
 using SPA_app_comments.Core.Helpers.Extensions;
 using SPA_app_comments.Infrastructure;
+using System.ComponentModel.DataAnnotations;
 
 namespace SPA_app_comments.MinimalAPI
 {
@@ -51,6 +53,19 @@ namespace SPA_app_comments.MinimalAPI
 
         public async static Task<IResult> CreateComment([FromForm] CreateCommentRequest request, IUnitOfWork<ApplicationDbContext> db)
         {
+            var validationResults = new List<ValidationResult>();
+            var validationContext = new ValidationContext(request);
+
+            if (!Validator.TryValidateObject(request, validationContext, validationResults, true))
+            {
+                var errors = validationResults.Select(vr => new ErrorResponse
+                {
+                    Error = vr.ErrorMessage
+                });
+
+                return Results.BadRequest(errors);
+            }
+
             var commentRepo = db.GetRepository<Comment>();
             var userRepo = db.GetRepository<User>();
             var existUser = userRepo.GetAll((user) => user.Name == request.UserName && user.Email == request.Email).FirstOrDefault();

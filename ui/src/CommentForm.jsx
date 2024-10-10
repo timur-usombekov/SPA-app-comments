@@ -7,7 +7,6 @@ import {
     Button,
     TextArea,
     Callout,
-    FileInput,
 } from '@blueprintjs/core';
 
 function CommentForm({ parentCommentId }) {
@@ -56,137 +55,138 @@ function CommentForm({ parentCommentId }) {
                 newErrors.file = 'TXT file size must not exceed 100 KB.';
             } else if (!/\.(jpg|txt|png|gif)$/i.test(formData.file.name)) {
                 newErrors.file = 'File must be in JPG, GIF, TXT, or PNG format.';
-            }
-        }
-
-        setErrors(newErrors);
-        return Object.keys(newErrors).length === 0;
-    };
-
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        const isValid = await validateForm();
-        if (isValid) {
-            const formDataToSubmit = new FormData();
-            for (const key in formData) {
-                formDataToSubmit.append(key, formData[key]);
+            } else {
+                // resize image
             }
 
-            try {
-                const response = await axios.post('https://localhost:7137/comment', formDataToSubmit);
-                console.log('Data submitted successfully:', response.data);
+            setErrors(newErrors);
+            return Object.keys(newErrors).length === 0;
+        };
 
-                window.location.reload();
+        const handleSubmit = async (e) => {
+            e.preventDefault();
+            const isValid = await validateForm();
+            if (isValid) {
+                const formDataToSubmit = new FormData();
+                for (const key in formData) {
+                    formDataToSubmit.append(key, formData[key]);
+                }
 
-                setFormData({
-                    username: '',
-                    email: '',
-                    text: '',
-                    url: null,
-                    file: null,
-                    ParentCommentId: parentCommentId || '00000000-0000-0000-0000-000000000000', 
-                });
-                setErrors({});
-            } catch (error) {
-                console.error('Error submitting data:', error);
+                try {
+                    const response = await axios.post('https://localhost:7137/comment', formDataToSubmit);
+                    console.log('Data submitted successfully:', response.data);
+
+                    window.location.reload();
+
+                    setFormData({
+                        username: '',
+                        email: '',
+                        text: '',
+                        url: null,
+                        file: null,
+                        ParentCommentId: parentCommentId || '00000000-0000-0000-0000-000000000000',
+                    });
+                    setErrors({});
+                } catch (error) {
+                    console.error('Error submitting data:', error);
+                }
             }
-        }
-    };
+        };
 
-    return (
-        <form onSubmit={handleSubmit} className="commentForm-form">
-            <FormGroup
-                label="User Name"
-                labelFor="username"
-                helperText={errors.username}
-                intent={errors.username ? 'danger' : 'none'}
-            >
-                <InputGroup
-                    id="username"
-                    name="username"
-                    placeholder="Enter your name"
-                    value={formData.username}
-                    onChange={handleChange}
+        return (
+            <form onSubmit={handleSubmit} className="commentForm-form">
+                <FormGroup
+                    label="User Name"
+                    labelFor="username"
+                    helperText={errors.username}
                     intent={errors.username ? 'danger' : 'none'}
-                />
-            </FormGroup>
-
-            <FormGroup
-                label="E-mail"
-                labelFor="email"
-                helperText={errors.email}
-                intent={errors.email ? 'danger' : 'none'}
-            >
-                <InputGroup
-                    id="email"
-                    name="email"
-                    placeholder="Enter your email"
-                    value={formData.email}
-                    onChange={handleChange}
-                    intent={errors.email ? 'danger' : 'none'}
-                />
-            </FormGroup>
-
-            <FormGroup
-                label="Home page (optional)"
-                labelFor="homepage"
-                helperText={errors.homepage}
-                intent={errors.homepage ? 'danger' : 'none'}
-            >
-                <InputGroup
-                    id="homepage"
-                    name="url"
-                    placeholder="Enter your home page URL"
-                    value={formData.url}
-                    onChange={handleChange}
-                    intent={errors.homepage ? 'danger' : 'none'}
-                />
-            </FormGroup>
-
-            <FormGroup
-                label="File Attachment (optional)"
-                labelFor="file"
-                helperText={errors.file}
-                intent={errors.file ? 'danger' : 'none'}
-            >
-                <label className="custom-file-upload">
-                    <input
-                        type="file"
-                        id="file"
-                        name="file"
+                >
+                    <InputGroup
+                        id="username"
+                        name="username"
+                        placeholder="Enter your name"
+                        value={formData.username}
                         onChange={handleChange}
-                        accept=".jpg, .gif, .png, .txt"
+                        intent={errors.username ? 'danger' : 'none'}
                     />
-                    {formData.file ? formData.file.name : 'Choose file...'}
-                </label>
-            </FormGroup>
+                </FormGroup>
 
-            <FormGroup
-                label="Text"
-                labelFor="text"
-                helperText={errors.text ? errors.text + ' (allowed tags: <b>, <i>, <u>, <em>, <strong>)' : ''}
-                intent={errors.text ? 'danger' : 'none'}
-            >
-                <TextArea
-                    id="text"
-                    name="text"
-                    placeholder="Enter your comment"
-                    value={formData.text}
-                    onChange={handleChange}
+                <FormGroup
+                    label="E-mail"
+                    labelFor="email"
+                    helperText={errors.email}
+                    intent={errors.email ? 'danger' : 'none'}
+                >
+                    <InputGroup
+                        id="email"
+                        name="email"
+                        placeholder="Enter your email"
+                        value={formData.email}
+                        onChange={handleChange}
+                        intent={errors.email ? 'danger' : 'none'}
+                    />
+                </FormGroup>
+
+                <FormGroup
+                    label="Home page (optional)"
+                    labelFor="homepage"
+                    helperText={errors.homepage}
+                    intent={errors.homepage ? 'danger' : 'none'}
+                >
+                    <InputGroup
+                        id="homepage"
+                        name="url"
+                        placeholder="Enter your home page URL"
+                        value={formData.url}
+                        onChange={handleChange}
+                        intent={errors.homepage ? 'danger' : 'none'}
+                    />
+                </FormGroup>
+
+                <FormGroup
+                    label="File Attachment (optional)"
+                    labelFor="file"
+                    helperText={errors.file}
+                    intent={errors.file ? 'danger' : 'none'}
+                >
+                    <label className="custom-file-upload">
+                        <input
+                            type="file"
+                            id="file"
+                            name="file"
+                            onChange={handleChange}
+                            accept=".jpg, .gif, .png, .txt"
+                        />
+                        {formData.file ? formData.file.name : 'Choose file...'}
+                    </label>
+                </FormGroup>
+
+                <FormGroup
+                    label="Text"
+                    labelFor="text"
+                    helperText={errors.text ? errors.text + ' (allowed tags: <b>, <i>, <u>, <em>, <strong>)' : ''}
                     intent={errors.text ? 'danger' : 'none'}
-                    fill
-                />
-            </FormGroup>
+                >
+                    <TextArea
+                        id="text"
+                        name="text"
+                        placeholder="Enter your comment"
+                        value={formData.text}
+                        onChange={handleChange}
+                        intent={errors.text ? 'danger' : 'none'}
+                        fill
+                    />
+                </FormGroup>
 
-            {Object.keys(errors).length > 0 && (
-                <Callout intent="danger" title="Validation Errors">
-                    Please fix the above errors.
-                </Callout>
-            )}
+                {Object.keys(errors).length > 0 && (
+                    <Callout intent="danger" title="Validation Errors">
+                        Please fix the above errors.
+                    </Callout>
+                )}
 
-            <Button type="submit" intent="primary" text="Submit" icon="send-message" />
-        </form>
-    );
+                <Button type="submit" intent="primary" text="Submit" icon="send-message" />
+            </form>
+        );
+    }
 }
-
 export default CommentForm;

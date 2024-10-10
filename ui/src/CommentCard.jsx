@@ -3,6 +3,8 @@ import { Card, Button, Icon, Spinner, Callout } from '@blueprintjs/core';
 import axios from 'axios';
 import './App.css';
 import CommentForm from './CommentForm'; 
+import { SlideshowLightbox } from 'lightbox.js-react'
+import 'lightbox.js-react/dist/index.css'
 
 function CommentCard({ commentId, username, email, text, file, createdAt, fileExtension, url }) {
     const [replies, setReplies] = useState([]);
@@ -70,7 +72,9 @@ function CommentCard({ commentId, username, email, text, file, createdAt, fileEx
             {file && (
                 <div className="commentCard-file">
                     {fileExtension !== ".txt" ? (
-                        <img src={URL.createObjectURL(file)} alt="attachment" style={{ maxWidth: '100%', height: 'auto' }} />
+                        <SlideshowLightbox className='container grid grid-cols-3 gap-2 mx-auto' showThumbnails={true}>
+                            <img src={URL.createObjectURL(file)} data-lightbox={commentId} alt="attachment" style={{ maxWidth: '100%', height: 'auto' }} />
+                        </SlideshowLightbox> 
                     ) : (
                         <a href={URL.createObjectURL(file)} target="_blank" rel="noopener noreferrer">
                             <Icon icon="document" /> {file.name}
