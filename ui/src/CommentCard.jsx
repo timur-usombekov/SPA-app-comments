@@ -2,14 +2,14 @@ import React, { useState } from 'react';
 import { Card, Button, Icon, Spinner, Callout } from '@blueprintjs/core';
 import axios from 'axios';
 import './App.css';
-import CommentForm from './CommentForm'; // Импортируем форму
+import CommentForm from './CommentForm'; 
 
-function CommentCard({ commentId, username, email, text, file, createdAt, url }) {
+function CommentCard({ commentId, username, email, text, file, createdAt, fileExtension, url }) {
     const [replies, setReplies] = useState([]);
     const [loadingReplies, setLoadingReplies] = useState(false);
     const [error, setError] = useState(null);
     const [showReplies, setShowReplies] = useState(false);
-    const [replying, setReplying] = useState(false); // Состояние для отображения формы
+    const [replying, setReplying] = useState(false);
 
     const fetchReplies = async () => {
         setLoadingReplies(true);
@@ -51,7 +51,7 @@ function CommentCard({ commentId, username, email, text, file, createdAt, url })
     };
 
     const handleReply = () => {
-        setReplying(true); 
+        setReplying(!replying); 
     };
 
     return (
@@ -69,9 +69,14 @@ function CommentCard({ commentId, username, email, text, file, createdAt, url })
             <p className="commentCard-text">{text}</p>
             {file && (
                 <div className="commentCard-file">
-                    <a href={URL.createObjectURL(file)} target="_blank" rel="noopener noreferrer">
-                        <Icon icon="document" /> {file.name}
-                    </a>
+                    {fileExtension !== ".txt" ? (
+                        <img src={URL.createObjectURL(file)} alt="attachment" style={{ maxWidth: '100%', height: 'auto' }} />
+                    ) : (
+                        <a href={URL.createObjectURL(file)} target="_blank" rel="noopener noreferrer">
+                            <Icon icon="document" /> {file.name}
+                        </a>
+                    )}
+                    
                 </div>
             )}
             <div className="commentCard-actions">

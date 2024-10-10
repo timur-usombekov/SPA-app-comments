@@ -17,7 +17,7 @@ function CommentForm({ parentCommentId }) {
         text: '',
         url: null,
         file: null,
-        ParentCommentId: parentCommentId || '00000000-0000-0000-0000-000000000000', // Используем переданный parentCommentId
+        ParentCommentId: parentCommentId || '00000000-0000-0000-0000-000000000000',
     });
 
     const [errors, setErrors] = useState({});
@@ -52,8 +52,8 @@ function CommentForm({ parentCommentId }) {
         }
 
         if (formData.file) {
-            if (formData.file.size > 100 * 1024) {
-                newErrors.file = 'File size must not exceed 100 KB.';
+            if (formData.file.size > 100 * 1024 && formData.fileExtension === '.txt') {
+                newErrors.file = 'TXT file size must not exceed 100 KB.';
             } else if (!/\.(jpg|txt|png|gif)$/i.test(formData.file.name)) {
                 newErrors.file = 'File must be in JPG, GIF, TXT, or PNG format.';
             }
@@ -84,7 +84,7 @@ function CommentForm({ parentCommentId }) {
                     text: '',
                     url: null,
                     file: null,
-                    ParentCommentId: parentCommentId || '00000000-0000-0000-0000-000000000000', // Сбрасываем ParentCommentId
+                    ParentCommentId: parentCommentId || '00000000-0000-0000-0000-000000000000', 
                 });
                 setErrors({});
             } catch (error) {
@@ -149,12 +149,16 @@ function CommentForm({ parentCommentId }) {
                 helperText={errors.file}
                 intent={errors.file ? 'danger' : 'none'}
             >
-                <FileInput
-                    id="file"
-                    name="file"
-                    onChange={handleChange}
-                    accept=".jpg, .gif, .png, .txt"
-                />
+                <label className="custom-file-upload">
+                    <input
+                        type="file"
+                        id="file"
+                        name="file"
+                        onChange={handleChange}
+                        accept=".jpg, .gif, .png, .txt"
+                    />
+                    {formData.file ? formData.file.name : 'Choose file...'}
+                </label>
             </FormGroup>
 
             <FormGroup

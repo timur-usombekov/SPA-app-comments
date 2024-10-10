@@ -12,6 +12,7 @@ namespace SPA_app_comments.Core.Helpers.Extensions
                 Id = comment.Id,
                 CreatedAt = comment.CreatedAt,
                 File = comment.File,
+                FileExtension = comment.FileExtension,
                 ParentCommentId = comment.ParentCommentId,
                 Text = comment.Text,
                 Url = comment.Url,

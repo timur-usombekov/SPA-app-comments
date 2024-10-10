@@ -90,6 +90,7 @@ namespace SPA_app_comments.MinimalAPI
                 Text = request.Text,
                 Url = request.Url,
                 File = await CheckFile(request.File),
+                FileExtension = Path.GetExtension(request.File?.FileName),
                 ParentCommentId = request.ParentCommentId == Guid.Empty ? null : request.ParentCommentId,
             });
 
@@ -120,6 +121,7 @@ namespace SPA_app_comments.MinimalAPI
                 Url = request.Url,
                 Text = request.Text,
                 File = await CheckFile(request.File),
+                FileExtension = Path.GetExtension(request.File?.FileName),
                 ParentCommentId = request.ParentCommentId == Guid.Empty ? null : request.ParentCommentId
             });
 
@@ -135,9 +137,9 @@ namespace SPA_app_comments.MinimalAPI
             using (var memoryStream = new MemoryStream())
             {
                 await file.CopyToAsync(memoryStream);
-                if(file.Length > 1024 * 100)
-                    throw new ArgumentException("Text file size exceeds the limit of 100 KB.");
-                var fileData = memoryStream.ToArray(); // array
+                if (Path.GetExtension(file.FileName) == ".txt" && file.Length > 1024 * 100)
+                    throw new FileSizeException("Text file size exceeds the limit of 100 KB.");
+                var fileData = memoryStream.ToArray(); 
 
                 return fileData;
             }

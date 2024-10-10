@@ -39,7 +39,7 @@ const CommentList = () => {
 
     useEffect(() => {
         fetchComments(sortBy);
-    }, [sortBy]); // Запрос при изменении сортировки
+    }, [sortBy]); 
 
     const handleSortChange = (event) => {
         setSortBy(event.target.value);
@@ -85,6 +85,7 @@ const CommentList = () => {
                         text={comment.text}
                         createdAt={comment.createdAt}
                         file={comment.file}
+                        fileExtension={comment.fileExtension}
                         url={comment.url}
                     />
                 ))

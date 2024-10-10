@@ -12,7 +12,9 @@ namespace SPA_app_comments.Core.Domain.Entities
         public string Text { get; set; } = null!;
         [StringLength(100)]
         public string? Url { get; set; }
-        public byte[]? File { get; set; } 
+        public byte[]? File { get; set; }
+        [StringLength(10)]
+        public string? FileExtension { get; set; } 
         public DateTime CreatedAt { get; set; }
 
 
