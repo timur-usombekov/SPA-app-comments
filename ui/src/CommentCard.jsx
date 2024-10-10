@@ -2,12 +2,14 @@ import React, { useState } from 'react';
 import { Card, Button, Icon, Spinner, Callout } from '@blueprintjs/core';
 import axios from 'axios';
 import './App.css';
+import CommentForm from './CommentForm'; // Импортируем форму
 
 function CommentCard({ commentId, username, email, text, file, createdAt, url }) {
     const [replies, setReplies] = useState([]);
     const [loadingReplies, setLoadingReplies] = useState(false);
     const [error, setError] = useState(null);
     const [showReplies, setShowReplies] = useState(false);
+    const [replying, setReplying] = useState(false); // Состояние для отображения формы
 
     const fetchReplies = async () => {
         setLoadingReplies(true);
@@ -47,21 +49,20 @@ function CommentCard({ commentId, username, email, text, file, createdAt, url })
         }
         setShowReplies(!showReplies);
     };
+
     const handleReply = () => {
-        // тут
+        setReplying(true); 
     };
 
     return (
         <Card interactive={false} elevation={2} className="commentCard">
             <div className="commentCard-header">
                 {url && (
-                    <a href={url } >
+                    <a href={url}>
                         <strong>{username}</strong>
                     </a>
                 )}
-                {!url && (
-                    <strong>{username}</strong>
-                )}
+                {!url && <strong>{username}</strong>}
                 <span className="commentCard-email">({email})</span>
                 <span className="commentCard-date">{new Date(createdAt).toLocaleString()}</span>
             </div>
@@ -77,7 +78,7 @@ function CommentCard({ commentId, username, email, text, file, createdAt, url })
                 <Button
                     intent="primary"
                     text="Reply"
-                    onClick={handleReply}
+                    onClick={handleReply} 
                 />
                 <Button
                     intent="success"
@@ -118,6 +119,10 @@ function CommentCard({ commentId, username, email, text, file, createdAt, url })
 
             {showReplies && replies.length === 0 && !loadingReplies && (
                 <p>No replies found.</p>
+            )}
+
+            {replying && (
+                <CommentForm parentCommentId={commentId} />
             )}
         </Card>
     );

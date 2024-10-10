@@ -10,14 +10,14 @@ import {
     FileInput,
 } from '@blueprintjs/core';
 
-function CommentForm() {
+function CommentForm({ parentCommentId }) {
     const [formData, setFormData] = useState({
         username: '',
         email: '',
         text: '',
         url: null,
         file: null,
-        ParentCommentId: '00000000-0000-0000-0000-000000000000'
+        ParentCommentId: parentCommentId || '00000000-0000-0000-0000-000000000000', // Используем переданный parentCommentId
     });
 
     const [errors, setErrors] = useState({});
@@ -84,7 +84,7 @@ function CommentForm() {
                     text: '',
                     url: null,
                     file: null,
-                    ParentCommentId: '00000000-0000-0000-0000-000000000000'
+                    ParentCommentId: parentCommentId || '00000000-0000-0000-0000-000000000000', // Сбрасываем ParentCommentId
                 });
                 setErrors({});
             } catch (error) {
