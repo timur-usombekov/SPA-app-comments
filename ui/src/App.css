@@ -10,14 +10,28 @@
     width: 100%;
 }
 .commentCard {
-    width: 400px;
-    margin-bottom: 16px;
-    padding: 16px;
+    margin-bottom: 15px;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
 }
 
 .commentCard-header {
-    margin-bottom: 8px;
-    font-size: 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.commentCard-text {
+    margin-bottom: 10px;
+    word-wrap: break-word;
+}
+
+.commentCard-actions {
+    display: flex;
+    justify-content: flex-start;
+    gap: 10px;
 }
 
 .commentCard-email {
@@ -26,18 +40,15 @@
     margin-left: 8px;
 }
 
-.commentCard-text {
-    font-size: 14px;
-    color: #333;
-    margin-bottom: 16px;
-}
 .commentCard-file {
     margin-bottom: 16px;
 }
 
-.commentCard-actions {
-    display: flex;
-    justify-content: space-between;
+.commentCard-replies {
+    margin-left: 20px; 
+    margin-top: 10px;
+    border-left: 2px solid #ddd;
+    padding-left: 10px;
 }
 
 .commentForm-form{

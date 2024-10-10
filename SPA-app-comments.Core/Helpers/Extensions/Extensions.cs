@@ -14,6 +14,7 @@ namespace SPA_app_comments.Core.Helpers.Extensions
                 File = comment.File,
                 ParentCommentId = comment.ParentCommentId,
                 Text = comment.Text,
+                Url = comment.Url,
                 User = comment.User.ToUserResponse(),
             };
 

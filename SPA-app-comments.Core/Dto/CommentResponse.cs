@@ -6,6 +6,7 @@
         public Guid? ParentCommentId { get; set; }
         public UserResponse User { get; set; }
         public string Text { get; set; } = null!;
+        public string? Url { get; set; } = null!;
         public byte[]? File { get; set; }
         public DateTime CreatedAt { get; set; }
 

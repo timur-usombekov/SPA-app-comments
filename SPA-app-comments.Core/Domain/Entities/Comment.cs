@@ -10,8 +10,10 @@ namespace SPA_app_comments.Core.Domain.Entities
         [StringLength(1000)]
         [Required]
         public string Text { get; set; } = null!;
-        public byte[]? File { get; set; }
-        public DateTime CreatedAt { get; } = DateTime.Now;
+        [StringLength(100)]
+        public string? Url { get; set; }
+        public byte[]? File { get; set; } 
+        public DateTime CreatedAt { get; set; }
 
 
         public User User { get; set; }

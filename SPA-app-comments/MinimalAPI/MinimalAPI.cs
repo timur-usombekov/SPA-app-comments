@@ -10,20 +10,38 @@ namespace SPA_app_comments.MinimalAPI
 {
     public class MinimalAPI
     {
-        public static IResult GetMainComments(IUnitOfWork<ApplicationDbContext> db)
+        public static IResult GetMainComments(IUnitOfWork<ApplicationDbContext> db, [FromQuery]string? sortBy = null)
         {
             var repo = db.GetRepository<Comment>();
             var comments = repo.GetAll();
+
+            comments = sortBy switch
+            {
+                "username" => comments.OrderBy(c => c.User.Name), 
+                "email" => comments.OrderBy(c => c.User.Email),
+                "date" => comments.OrderBy(c => c.CreatedAt), 
+                _ => comments.OrderByDescending(c => c.CreatedAt)
+            };
+
             var commentResponse = comments
                 .Where(c => c.ParentCommentId is null)
                 .Select(c => c.ToCommentResponse()).ToList();
 
+
             return TypedResults.Ok(commentResponse);
         }
-        public static IResult GetRepliesForComment([FromRoute] Guid commentId, IUnitOfWork<ApplicationDbContext> db)
+        public static IResult GetRepliesForComment([FromRoute] Guid commentId, IUnitOfWork<ApplicationDbContext> db, [FromQuery] string? sortBy = null)
         {
             var repo = db.GetRepository<Comment>();
             var comments = repo.GetAll();
+
+            comments = sortBy switch
+            {
+                "username" => comments.OrderBy(c => c.User.Name),
+                "email" => comments.OrderBy(c => c.User.Email),
+                "date" => comments.OrderBy(c => c.CreatedAt),
+                _ => comments.OrderByDescending(c => c.CreatedAt)
+            };
             var commentResponse = comments
                 .Where(c => c.ParentCommentId == commentId)
                 .Select(c => c.ToCommentResponse()).ToList();
@@ -68,7 +86,9 @@ namespace SPA_app_comments.MinimalAPI
             {
                 Id = Guid.NewGuid(),
                 UserId = user.Id,
+                CreatedAt = DateTime.UtcNow,
                 Text = request.Text,
+                Url = request.Url,
                 File = await CheckFile(request.File),
                 ParentCommentId = request.ParentCommentId == Guid.Empty ? null : request.ParentCommentId,
             });
@@ -95,7 +115,9 @@ namespace SPA_app_comments.MinimalAPI
             var comment = commentRepository.Insert(new Comment()
             {
                 Id = Guid.NewGuid(),
+                CreatedAt = DateTime.UtcNow,
                 UserId = user.Id,
+                Url = request.Url,
                 Text = request.Text,
                 File = await CheckFile(request.File),
                 ParentCommentId = request.ParentCommentId == Guid.Empty ? null : request.ParentCommentId

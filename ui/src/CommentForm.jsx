@@ -14,8 +14,8 @@ function CommentForm() {
     const [formData, setFormData] = useState({
         username: '',
         email: '',
-        url: '',
         text: '',
+        url: null,
         file: null,
         ParentCommentId: '00000000-0000-0000-0000-000000000000'
     });
@@ -27,19 +27,6 @@ function CommentForm() {
         setFormData({
             ...formData,
             [name]: type === 'file' ? files[0] : value,
-        });
-    };
-
-    const validateImage = (file) => {
-        const img = new Image();
-        img.src = URL.createObjectURL(file);
-        return new Promise((resolve) => {
-            img.onload = () => {
-                if (img.width > 320 || img.height > 240) {
-                    resolve(false);
-                }
-                resolve(true);
-            };
         });
     };
 
@@ -69,12 +56,6 @@ function CommentForm() {
                 newErrors.file = 'File size must not exceed 100 KB.';
             } else if (!/\.(jpg|txt|png|gif)$/i.test(formData.file.name)) {
                 newErrors.file = 'File must be in JPG, GIF, TXT, or PNG format.';
-            } else {
-                /*const isValidImage = await validateImage(formData.file);
-                if (!isValidImage) {
-                    newErrors.file = 'Image must not exceed 320x240 pixels. It will be resized.';
-                    // TODO: make image smaller
-                }*/
             }
         }
 
@@ -94,11 +75,14 @@ function CommentForm() {
             try {
                 const response = await axios.post('https://localhost:7137/comment', formDataToSubmit);
                 console.log('Data submitted successfully:', response.data);
+
+                window.location.reload();
+
                 setFormData({
                     username: '',
                     email: '',
-                    url: '',
                     text: '',
+                    url: null,
                     file: null,
                     ParentCommentId: '00000000-0000-0000-0000-000000000000'
                 });
