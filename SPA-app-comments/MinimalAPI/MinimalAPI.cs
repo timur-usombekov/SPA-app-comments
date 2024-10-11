@@ -77,7 +77,7 @@ namespace SPA_app_comments.MinimalAPI
                 }
                 catch (FileSizeException e)
                 {
-                    return TypedResults.BadRequest(e.Message);
+                    return TypedResults.BadRequest(new ErrorResponse() {Error = e.Message });
                 }
             }
             else
@@ -88,7 +88,7 @@ namespace SPA_app_comments.MinimalAPI
                 }
                 catch (FileSizeException e)
                 {
-                    return TypedResults.BadRequest(e.Message);
+                    return TypedResults.BadRequest(new ErrorResponse() { Error = e.Message });
                 }
 
             }
