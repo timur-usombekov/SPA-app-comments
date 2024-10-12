@@ -15,7 +15,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{28632240
 EndProject
 Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "ui", "UI\ui.esproj", "{996AB15D-2817-4CC1-8F04-5A551C1B08E3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApiTests", "ApiTests\ApiTests.csproj", "{F5715168-DBE6-4C0B-A9C2-C65912E5830F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ApiTests", "ApiTests\ApiTests.csproj", "{F5715168-DBE6-4C0B-A9C2-C65912E5830F}"
+EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{C3795408-4402-4703-8BE7-9C2DA9A7A821}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +47,10 @@ Global
 		{F5715168-DBE6-4C0B-A9C2-C65912E5830F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F5715168-DBE6-4C0B-A9C2-C65912E5830F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F5715168-DBE6-4C0B-A9C2-C65912E5830F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C3795408-4402-4703-8BE7-9C2DA9A7A821}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C3795408-4402-4703-8BE7-9C2DA9A7A821}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C3795408-4402-4703-8BE7-9C2DA9A7A821}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C3795408-4402-4703-8BE7-9C2DA9A7A821}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -131,7 +131,7 @@ function CommentForm({ parentCommentId }) {
             }
 
             try {
-                const response = await axios.post('https://localhost:7137/comment', formDataToSubmit);
+                const response = await axios.post('http://localhost:8001/comment', formDataToSubmit);
                 console.log('Data submitted successfully:', response.data);
 
                 window.location.reload();

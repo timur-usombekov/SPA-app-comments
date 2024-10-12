@@ -14,7 +14,7 @@ const CommentList = () => {
     const fetchComments = async () => {
         setLoading(true);
         try {
-            const url = `https://localhost:7137/comment?sortBu=${sortBy}`;
+            const url = `http://localhost:8001/comment?sortBy=${sortBy}`;
             const response = await axios.get(url);
             
             const commentsWithFiles = response.data.map(comment => {

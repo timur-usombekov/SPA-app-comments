@@ -17,7 +17,7 @@ function CommentCard({ commentId, username, email, text, file, createdAt, fileEx
         setLoadingReplies(true);
         setError(null);
         try {
-            const response = await axios.get(`https://localhost:7137/comment/${commentId}`);
+            const response = await axios.get(`http://localhost:8001/comment/${commentId}`);
 
             if (response.data && Array.isArray(response.data)) {
                 const repliesWithFiles = response.data.map(reply => {
