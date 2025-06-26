@@ -1,60 +1,61 @@
 # SPA-app-comments
-Проект представляет собой веб-приложение, разработанное с использованием ASP.NET(ASP.NET Web API) и React.
-## Возможности приложения
+This project is a web application built using ASP.NET Web API for the backend and React for the frontend.
+## Features
 
-- Добавление комментариев: Пользователь может добавить новыё комментарий(запись), указывая свое имя, email, свой веб-сайт, текст комментария, загружая изображения или текстовые файлы.
+- Add Comments: Users can add new comments (entries) by providing their name, email, website (optional), comment text, and by uploading images or text files.
 
-- Captcha: Для добавления комментария необходимо ввести капчу.
+- Captcha: A CAPTCHA is required to submit a comment.
 
-- Сортировка комментариев: Комментарии могут быть отсортированы по имени автора, адресу электронной почты или дате добавления. Возможны сортировки как по возрастанию, так и по убыванию. Сортировка по умолчанию - LIFO. 
+- Sort Comments: Comments can be sorted by author's name, email, or submission date. Both ascending and descending order are supported. The default sorting order is LIFO (Last-In, First-Out).
 
-- Взаимодействие с комментариями: Пользователи могут нажать на кнопку **Watch replies**, что бы просмотреть ответы, либо на **Reply** что бы ответить на него.
+- Interact with Comments: Users can click the Watch replies button to view responses to a comment, or the Reply button to respond to it.
 
-- Пагинация: Если на странице количество комментариев превысит 25, остальные будут отображатся на следующей странице.
+- Pagination: If the number of comments on a page exceeds 25, the remaining comments will be displayed on subsequent pages.
 
-- Загрузка изображений и файлов: Пользователи могут загрузить изображение или текстовый файл к своему комментарию, просмотр изображений сопровождается визуальными эффектами.
-  >Изображение должно быть не более 320х240 пикселей, при попытке залить изображение большего размера, картинка пропорционально уменьшается до заданных размеров.
-  >Текстовый файл должен иметь расширение **.txt** и быть не более 100 Кб.
+- Image and File Uploads: Users can upload an image or a text file with their comment. Image previews include visual effects.
+  >Images should be no larger than 320x240 pixels. If a larger image is uploaded, it will be proportionally resized to fit these dimensions.
 
-## Запуск локально
+  >Text files must have a .txt extension and be no larger than 100 KB.
 
-Клонируйте репозиторий
+## Local Setup
+
+Clone the repository:
 
 ```bash
   git clone https://github.com/timur-usombekov/SPA-app-comments
 ```
 
-Перейдите в директорию проекта
+Navigate to the project directory:
 
 ```bash
   cd путь/к/проекту
 ```
 
-Убедитесь что у вас установлен **Docker** и постройте образ
+Ensure Docker is installed and then build the Docker images:
 
 ```bash
   docker-compose build
 ```
 
-После успешого завершения, запустите его 
+Once the build is successful, run the services:
 
 ```bash
   docker-compose up -d
 ```
 
-После упешного запуска перейдите в директорию c **ui**
+After successful startup, navigate into the **ui** directory:
 
 ```bash
   cd ui
 ```
 
-Выполните команду для создания image и запустите его
+Build the UI Docker image and run it:
 
 ```bash
   docker build -t имя_образа .
   docker run -d -p 8003:80 имя_образа
 ```
-В случае если всё прошло успешно перейдите по адресу http://localhost:8003, вы должны увидеть приблизительно следующий результат
-  >Комментарий был оставлен заранее для демонстрации, вы его не увидите
+If everything runs successfully, you should be able to access the application at http://localhost:8003
+  >Note: The initial comment shown in the demonstration was added beforehand and will not be present when you first run the application.
 
 ![image](https://github.com/user-attachments/assets/34a4e08d-4001-4cb5-bdc8-2637eff02c43)
